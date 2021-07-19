@@ -24,5 +24,5 @@ jobs:
           python -m pip install pyre-check
       - name: Lint with pyre
         run: |
-          pyre --source-directory lib
+          pyre --source-directory lib --search-path $(python -c 'from distutils.sysconfig import get_python_lib;print(get_python_lib(0))') --search-path $(python -c 'from distutils.sysconfig import       get_python_lib;print(get_python_lib(1))')
         if: always()
