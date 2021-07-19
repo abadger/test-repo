@@ -18,14 +18,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Setup virtual environment
+      - name: Setup virtual environment via poetry
         run: |
-          python -m venv venv-dir
-          source  venv-dir/bin/activate
-          python -m pip install pyre-check==0.0.46
+          python -m pip install poetry
+          poetry install
+          poetry update
       - name: Lint with pyre
         run: |
-          source venv-dir/bin/activate
-          which pyre
-          pyre --source-directory lib --search-path $(python -c 'from distutils.sysconfig import get_python_lib;print(get_python_lib(0))') --search-path $(python -c 'from distutils.sysconfig import get_python_lib;print(get_python_lib(1))')
+          poetry run pyre --source-directory lib --search-path $(poetry run python -c 'from distutils.sysconfig import get_python_lib;print(get_python_lib(0))') --search-path $(poetry run python -c 'from distutils.sysconfig import get_python_lib;print(get_python_lib(1))')
         if: always()
